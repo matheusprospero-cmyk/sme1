@@ -19,90 +19,248 @@
       --radius:  14px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: 'DM Sans', sans-serif;
-      background: var(--bg); color: var(--text);
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 24px 16px;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
     }
+
     body::before {
       content: ''; position: fixed; inset: 0;
       background: radial-gradient(ellipse 60% 40% at 20% 20%, rgba(79,142,247,.07) 0%, transparent 70%);
       pointer-events: none;
     }
-    .container { width: 100%; max-width: 480px; }
-    .back {
-      display: inline-flex; align-items: center; gap: 6px;
-      color: var(--muted); font-size: 13px; text-decoration: none;
-      margin-bottom: 20px; transition: color .2s;
+
+    /* ── TOPO FIXO ── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(15,17,23,.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 56px;
     }
-    .back:hover { color: var(--text); }
-    .back svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .topbar-title {
+      font-size: 15px;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .topbar-fiscal {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
+    }
+
+    /* ── CONTEÚDO ── */
+    .content {
+      flex: 1;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 520px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
     .card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 24px; margin-bottom: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
       animation: fadeUp .2s ease both;
     }
+
     @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-    .card-title { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 16px; }
-    .field { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--border); }
-    .field:last-child { border-bottom: none; }
-    .field-label { font-size: 13px; color: var(--muted); flex-shrink: 0; margin-right: 16px; }
-    .field-value { font-size: 14px; color: var(--text); text-align: right; word-break: break-word; }
-    .badge { background: rgba(79,142,247,.15); color: #93c5fd; border: 1px solid rgba(79,142,247,.25); border-radius: 6px; padding: 2px 8px; font-size: 12px; }
-    .tag-cache { background: rgba(34,197,94,.12); color: #86efac; border: 1px solid rgba(34,197,94,.2); border-radius: 6px; padding: 1px 7px; font-size: 11px; margin-left: 6px; vertical-align: middle; }
-    .btn {
-      width: 100%; padding: 15px; border: none; border-radius: 10px;
-      font-size: 16px; font-weight: 600; font-family: 'DM Sans', sans-serif;
-      cursor: pointer; transition: opacity .2s, transform .1s;
+
+    .card-title {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .9px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .btn:active { transform: scale(.98); }
-    .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
-    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; box-shadow: 0 4px 16px rgba(79,142,247,.3); }
-    .resultado { margin-top: 12px; padding: 18px; border-radius: var(--radius); font-size: 15px; font-weight: 600; text-align: center; display: none; line-height: 1.6; }
+
+    .tag-cache {
+      background: rgba(34,197,94,.12);
+      color: #86efac;
+      border: 1px solid rgba(34,197,94,.2);
+      border-radius: 5px;
+      padding: 1px 7px;
+      font-size: 10px;
+      letter-spacing: .5px;
+    }
+
+    .field {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .field:last-child { border-bottom: none; padding-bottom: 0; }
+    .field:first-of-type { padding-top: 0; }
+
+    .field-label {
+      font-size: 13px;
+      color: var(--muted);
+      flex-shrink: 0;
+      min-width: 64px;
+    }
+
+    .field-value {
+      font-size: 14px;
+      color: var(--text);
+      text-align: right;
+      word-break: break-word;
+      font-weight: 500;
+    }
+
+    .badge-fiscal {
+      background: rgba(79,142,247,.15);
+      color: #93c5fd;
+      border: 1px solid rgba(79,142,247,.25);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 12px;
+    }
+
+    /* ── BOTÕES ── */
+    .btn {
+      width: 100%;
+      padding: 17px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+      letter-spacing: .2px;
+    }
+    .btn:active  { transform: scale(.97); }
+    .btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(79,142,247,.35);
+    }
+
+    .btn-novo {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      display: none; /* aparece so apos resultado */
+    }
+
+    .btn-novo svg {
+      width: 18px; height: 18px;
+      fill: none; stroke: currentColor;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ── RESULTADO ── */
+    .resultado {
+      border-radius: var(--radius);
+      padding: 20px;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.6;
+      display: none;
+      animation: fadeUp .2s ease both;
+    }
     .resultado.sucesso { background: rgba(34,197,94,.12); color: #86efac; border: 1px solid rgba(34,197,94,.25); display: block; }
     .resultado.erro    { background: rgba(239,68,68,.12);  color: #fca5a5; border: 1px solid rgba(239,68,68,.25);  display: block; }
     .resultado.info    { background: rgba(79,142,247,.12); color: #93c5fd; border: 1px solid rgba(79,142,247,.25); display: block; font-weight: 400; font-size: 14px; }
-    .nome-destaque { font-size: 20px; margin-top: 8px; color: #fff; }
+
+    .nome-destaque { font-size: 22px; margin-top: 10px; color: #fff; font-weight: 600; }
+    .resultado small { font-size: 12px; font-weight: 400; opacity: .8; }
+
+    /* ── SPACER para nao ficar grudado no fundo ── */
+    .spacer { height: 24px; flex-shrink: 0; }
   </style>
 </head>
 <body>
-<div class="container">
 
-  <a href="index.html" class="back">
-    <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    Novo QR Code
-  </a>
-
-  <!-- participante -->
-  <div class="card">
-    <div class="card-title">
-      Participante
-      <span class="tag-cache" id="tagCache" style="display:none">cache</span>
-    </div>
-    <div class="field"><span class="field-label">Nome</span>     <span class="field-value" id="fNome">-</span></div>
-    <div class="field"><span class="field-label">E-mail</span>   <span class="field-value" id="fEmail">-</span></div>
-    <div class="field"><span class="field-label">Palestra</span> <span class="field-value" id="fPalestra">-</span></div>
-    <div class="field"><span class="field-label">Token</span>    <span class="field-value" id="fToken">-</span></div>
-  </div>
-
-  <!-- fiscal -->
-  <div class="card">
-    <div class="card-title">Fiscal</div>
-    <div class="field">
-      <span class="field-label">Logado como</span>
-      <span class="field-value" id="fFiscal">-</span>
+  <!-- topbar fixa -->
+  <div class="topbar">
+    <div style="flex:1">
+      <div class="topbar-title">Validar Presenca</div>
+      <div class="topbar-fiscal" id="topFiscal"></div>
     </div>
   </div>
 
-  <button class="btn btn-primary" id="btnValidar" onclick="validar()" disabled>
-    Validar Presenca
-  </button>
+  <!-- conteudo rolavel -->
+  <div class="content">
 
-  <div class="resultado" id="resultado"></div>
+    <!-- participante -->
+    <div class="card">
+      <div class="card-title">
+        Participante
+        <span class="tag-cache" id="tagCache" style="display:none">cache</span>
+      </div>
+      <div class="field"><span class="field-label">Nome</span>     <span class="field-value" id="fNome">-</span></div>
+      <div class="field"><span class="field-label">E-mail</span>   <span class="field-value" id="fEmail">-</span></div>
+      <div class="field"><span class="field-label">Palestra</span> <span class="field-value" id="fPalestra">-</span></div>
+      <div class="field"><span class="field-label">Token</span>    <span class="field-value" id="fToken">-</span></div>
+    </div>
 
-</div>
+    <!-- fiscal -->
+    <div class="card">
+      <div class="card-title">Fiscal</div>
+      <div class="field">
+        <span class="field-label">Logado como</span>
+        <span class="field-value" id="fFiscal">-</span>
+      </div>
+    </div>
+
+    <!-- resultado (aparece apos validar) -->
+    <div class="resultado" id="resultado"></div>
+
+    <!-- botao validar -->
+    <button class="btn btn-primary" id="btnValidar" onclick="validar()" disabled>
+      Validar Presenca
+    </button>
+
+    <!-- botao novo registro (aparece apos resultado) -->
+    <a href="index.html" class="btn btn-novo" id="btnNovo">
+      <svg viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+      Escanear proximo QR Code
+    </a>
+
+    <div class="spacer"></div>
+
+  </div>
+
 <script>
   var APPS_URL     = "https://script.google.com/macros/s/AKfycbwgn-kasXrfTWULBUe_7chco-O9TUFjFLVtXqkfyBs8WuGHKDLX8hhiENd2r-bly6-E0A/exec";
   var KEY_EMAIL    = "fiscal_email";
@@ -113,7 +271,6 @@
   var tokenGlobal = (params.get("t") || "").toUpperCase();
   var emailFiscal = params.get("f") || localStorage.getItem(KEY_EMAIL) || "";
 
-  // ── CACHE ──────────────────────────────────────────────────
   function dataHoje() { return new Date().toISOString().slice(0, 10); }
 
   function cacheValido() {
@@ -136,34 +293,27 @@
     localStorage.setItem(KEY_CACHE_DT, dataHoje());
   }
 
-  // ── INIT ───────────────────────────────────────────────────
   window.onload = function() {
 
-    // Sem fiscal: volta para login
     if (!emailFiscal) { window.location.href = "index.html"; return; }
 
-    document.getElementById("fToken").textContent = tokenGlobal || "-";
+    // topbar e fiscal
+    document.getElementById("topFiscal").textContent  = emailFiscal;
     document.getElementById("fFiscal").innerHTML =
-      '<span class="badge">' + emailFiscal + '</span>';
+      '<span class="badge-fiscal">' + emailFiscal + '</span>';
+    document.getElementById("fToken").textContent = tokenGlobal || "-";
 
     if (!tokenGlobal) {
       mostrarResultado({ sucesso: false, mensagem: "Token nao informado." });
       return;
     }
 
-    // Tenta buscar no cache primeiro — instantaneo
+    // Busca no cache primeiro
     var dadosCache = buscarNoCache(tokenGlobal);
-    if (dadosCache) {
-      preencherParticipante(dadosCache, true);
-      return;
-    }
+    if (dadosCache) { preencherParticipante(dadosCache, true); return; }
 
-    // Nao tem no cache: busca online e tenta recarregar o cache
-    if (cacheValido()) {
-      // Cache existe mas token nao foi encontrado — busca direto
-      buscarOnline();
-    } else {
-      // Cache expirado: recarrega tudo e busca nele
+    // Sem cache valido: recarrega tudo
+    if (!cacheValido()) {
       fetch(APPS_URL + "?action=carregarCache")
         .then(function(r) { return r.json(); })
         .then(function(data) {
@@ -172,10 +322,11 @@
             var p = buscarNoCache(tokenGlobal);
             if (p) { preencherParticipante(p, true); return; }
           }
-          // Nao achou mesmo apos recarregar: busca individual
           buscarOnline();
         })
         .catch(function() { buscarOnline(); });
+    } else {
+      buscarOnline();
     }
 
   };
@@ -184,10 +335,7 @@
     fetch(APPS_URL + "?action=buscarParticipante&t=" + encodeURIComponent(tokenGlobal))
       .then(function(r) { return r.json(); })
       .then(function(data) {
-        if (!data.ok) {
-          mostrarResultado({ sucesso: false, mensagem: data.mensagem });
-          return;
-        }
+        if (!data.ok) { mostrarResultado({ sucesso: false, mensagem: data.mensagem }); return; }
         preencherParticipante(data.dados, false);
       })
       .catch(function() {
@@ -203,44 +351,52 @@
     document.getElementById("btnValidar").disabled = false;
   }
 
-  // ── VALIDAR ────────────────────────────────────────────────
   function validar() {
     var btn = document.getElementById("btnValidar");
     var res = document.getElementById("resultado");
 
-    btn.disabled = true; btn.textContent = "Registrando...";
-    res.className = "resultado info"; res.innerHTML = "Registrando presenca...";
+    btn.disabled = true;
+    btn.textContent = "Registrando...";
+    res.className = "resultado info";
+    res.innerHTML = "Registrando presenca...";
 
     fetch(APPS_URL +
       "?action=registrarPresenca" +
       "&t=" + encodeURIComponent(tokenGlobal) +
       "&f=" + encodeURIComponent(emailFiscal))
       .then(function(r) { return r.json(); })
-      .then(function(data) {
-        mostrarResultado(data);
-        if (data.sucesso) {
-          btn.textContent = "Presenca Registrada";
-        } else if (data.jaRegistrado) {
-          btn.textContent = "Ja Registrado";
-        } else {
-          btn.disabled = false;
-          btn.textContent = "Validar Presenca";
-        }
-      })
+      .then(function(data) { mostrarResultado(data); })
       .catch(function() {
-        res.className = "resultado erro"; res.innerHTML = "Erro de comunicacao. Tente novamente.";
-        btn.disabled = false; btn.textContent = "Validar Presenca";
+        res.className = "resultado erro";
+        res.innerHTML = "Erro de comunicacao. Tente novamente.";
+        btn.disabled = false;
+        btn.textContent = "Validar Presenca";
       });
   }
 
   function mostrarResultado(data) {
     var res = document.getElementById("resultado");
+    var btn = document.getElementById("btnValidar");
+    var btnNovo = document.getElementById("btnNovo");
+
     if (data.sucesso) {
       res.className = "resultado sucesso";
       res.innerHTML = "Presenca registrada!<div class='nome-destaque'>" + (data.nome || "") + "</div>";
+      btn.disabled = true;
+      btn.textContent = "Presenca Registrada";
+      btnNovo.style.display = "flex";
+    } else if (data.jaRegistrado) {
+      res.className = "resultado erro";
+      res.innerHTML = "Presenca ja registrada anteriormente.";
+      if (data.validadoPor) res.innerHTML += "<br><small>Validado por: " + data.validadoPor + "</small>";
+      btn.disabled = true;
+      btn.textContent = "Ja Registrado";
+      btnNovo.style.display = "flex";
     } else {
       res.className = "resultado erro";
       res.innerHTML = data.mensagem || "Erro desconhecido.";
+      btn.disabled = false;
+      btn.textContent = "Validar Presenca";
     }
   }
 </script>
