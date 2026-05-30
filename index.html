@@ -287,9 +287,8 @@
   }
 
   function irParaValidarComToken(token, email) {
-    window.location.href =
-      "validar.html?t=" + encodeURIComponent(token) +
-      "&f="             + encodeURIComponent(email);
+    // Email nao vai na URL — lido do localStorage no validar.html
+    window.location.href = "validar.html?t=" + encodeURIComponent(token);
   }
 
   // ── LOGOUT ─────────────────────────────────────────────────
