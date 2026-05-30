@@ -11,6 +11,7 @@
       --surface: #1a1d27;
       --border:  #2a2d3a;
       --accent:  #4f8ef7;
+      --accent2: #7c3aed;
       --success: #22c55e;
       --danger:  #ef4444;
       --text:    #e8eaf0;
@@ -31,23 +32,26 @@
       pointer-events: none;
     }
     .container { width: 100%; max-width: 480px; }
-    .back { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; text-decoration: none; margin-bottom: 20px; transition: color .2s; }
+    .back {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--muted); font-size: 13px; text-decoration: none;
+      margin-bottom: 20px; transition: color .2s;
+    }
     .back:hover { color: var(--text); }
     .back svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 24px; margin-bottom: 12px;
-      animation: fadeUp .25s ease both;
+      animation: fadeUp .2s ease both;
     }
-    @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
     .card-title { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 16px; }
     .field { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--border); }
     .field:last-child { border-bottom: none; }
     .field-label { font-size: 13px; color: var(--muted); flex-shrink: 0; margin-right: 16px; }
     .field-value { font-size: 14px; color: var(--text); text-align: right; word-break: break-word; }
-    .badge-fiscal { background: rgba(79,142,247,.15); color: #93c5fd; border: 1px solid rgba(79,142,247,.25); border-radius: 6px; padding: 2px 8px; font-size: 12px; }
-    .skeleton { display: inline-block; background: var(--border); border-radius: 4px; height: 14px; width: 140px; animation: pulse 1.2s ease-in-out infinite; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+    .badge { background: rgba(79,142,247,.15); color: #93c5fd; border: 1px solid rgba(79,142,247,.25); border-radius: 6px; padding: 2px 8px; font-size: 12px; }
+    .tag-cache { background: rgba(34,197,94,.12); color: #86efac; border: 1px solid rgba(34,197,94,.2); border-radius: 6px; padding: 1px 7px; font-size: 11px; margin-left: 6px; vertical-align: middle; }
     .btn {
       width: 100%; padding: 15px; border: none; border-radius: 10px;
       font-size: 16px; font-weight: 600; font-family: 'DM Sans', sans-serif;
@@ -55,15 +59,12 @@
     }
     .btn:active { transform: scale(.98); }
     .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
-    .btn-primary { background: linear-gradient(135deg, var(--accent), #7c3aed); color: #fff; box-shadow: 0 4px 16px rgba(79,142,247,.3); }
-    .resultado {
-      margin-top: 12px; padding: 18px; border-radius: var(--radius);
-      font-size: 15px; font-weight: 600; text-align: center; display: none; line-height: 1.6;
-    }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; box-shadow: 0 4px 16px rgba(79,142,247,.3); }
+    .resultado { margin-top: 12px; padding: 18px; border-radius: var(--radius); font-size: 15px; font-weight: 600; text-align: center; display: none; line-height: 1.6; }
     .resultado.sucesso { background: rgba(34,197,94,.12); color: #86efac; border: 1px solid rgba(34,197,94,.25); display: block; }
     .resultado.erro    { background: rgba(239,68,68,.12);  color: #fca5a5; border: 1px solid rgba(239,68,68,.25);  display: block; }
     .resultado.info    { background: rgba(79,142,247,.12); color: #93c5fd; border: 1px solid rgba(79,142,247,.25); display: block; font-weight: 400; font-size: 14px; }
-    .nome-destaque { font-size: 18px; margin-top: 8px; color: #fff; }
+    .nome-destaque { font-size: 20px; margin-top: 8px; color: #fff; }
   </style>
 </head>
 <body>
@@ -71,24 +72,27 @@
 
   <a href="index.html" class="back">
     <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    Voltar
+    Novo QR Code
   </a>
 
-  <!-- card participante -->
+  <!-- participante -->
   <div class="card">
-    <div class="card-title">Participante</div>
-    <div class="field"><span class="field-label">Nome</span>      <span class="field-value" id="fNome"><span class="skeleton"></span></span></div>
-    <div class="field"><span class="field-label">E-mail</span>    <span class="field-value" id="fEmail"><span class="skeleton"></span></span></div>
-    <div class="field"><span class="field-label">Palestra</span>  <span class="field-value" id="fPalestra"><span class="skeleton"></span></span></div>
-    <div class="field"><span class="field-label">Token</span>     <span class="field-value" id="fToken"><span class="skeleton"></span></span></div>
+    <div class="card-title">
+      Participante
+      <span class="tag-cache" id="tagCache" style="display:none">cache</span>
+    </div>
+    <div class="field"><span class="field-label">Nome</span>     <span class="field-value" id="fNome">-</span></div>
+    <div class="field"><span class="field-label">E-mail</span>   <span class="field-value" id="fEmail">-</span></div>
+    <div class="field"><span class="field-label">Palestra</span> <span class="field-value" id="fPalestra">-</span></div>
+    <div class="field"><span class="field-label">Token</span>    <span class="field-value" id="fToken">-</span></div>
   </div>
 
-  <!-- card fiscal -->
+  <!-- fiscal -->
   <div class="card">
     <div class="card-title">Fiscal</div>
     <div class="field">
       <span class="field-label">Logado como</span>
-      <span class="field-value" id="fFiscal"><span class="skeleton"></span></span>
+      <span class="field-value" id="fFiscal">-</span>
     </div>
   </div>
 
@@ -99,63 +103,107 @@
   <div class="resultado" id="resultado"></div>
 
 </div>
-
 <script>
-  var APPS_URL    = "https://script.google.com/macros/s/AKfycbwgn-kasXrfTWULBUe_7chco-O9TUFjFLVtXqkfyBs8WuGHKDLX8hhiENd2r-bly6-E0A/exec";
-  var STORAGE_KEY = "fiscal_email";
+  var APPS_URL     = "https://script.google.com/macros/s/AKfycbwgn-kasXrfTWULBUe_7chco-O9TUFjFLVtXqkfyBs8WuGHKDLX8hhiENd2r-bly6-E0A/exec";
+  var KEY_EMAIL    = "fiscal_email";
+  var KEY_CACHE    = "participantes_cache";
+  var KEY_CACHE_DT = "participantes_cache_data";
 
-  // Lê token e fiscal da URL (GitHub Pages suporta URLSearchParams normalmente)
-  var params        = new URLSearchParams(window.location.search);
-  var tokenGlobal   = params.get("t") || "";
-  var emailFiscal   = params.get("f") || localStorage.getItem(STORAGE_KEY) || "";
+  var params      = new URLSearchParams(window.location.search);
+  var tokenGlobal = (params.get("t") || "").toUpperCase();
+  var emailFiscal = params.get("f") || localStorage.getItem(KEY_EMAIL) || "";
 
+  // ── CACHE ──────────────────────────────────────────────────
+  function dataHoje() { return new Date().toISOString().slice(0, 10); }
+
+  function cacheValido() {
+    return localStorage.getItem(KEY_CACHE_DT) === dataHoje() &&
+           localStorage.getItem(KEY_CACHE);
+  }
+
+  function buscarNoCache(token) {
+    try {
+      var lista = JSON.parse(localStorage.getItem(KEY_CACHE) || "[]");
+      for (var i = 0; i < lista.length; i++) {
+        if (lista[i].token === token) return lista[i];
+      }
+    } catch(e) {}
+    return null;
+  }
+
+  function salvarCache(lista) {
+    localStorage.setItem(KEY_CACHE, JSON.stringify(lista));
+    localStorage.setItem(KEY_CACHE_DT, dataHoje());
+  }
+
+  // ── INIT ───────────────────────────────────────────────────
   window.onload = function() {
 
     // Sem fiscal: volta para login
-    if (!emailFiscal) {
-      window.location.href = "index.html";
-      return;
-    }
+    if (!emailFiscal) { window.location.href = "index.html"; return; }
 
-    // Exibe fiscal
+    document.getElementById("fToken").textContent = tokenGlobal || "-";
     document.getElementById("fFiscal").innerHTML =
-      '<span class="badge-fiscal">' + emailFiscal + '</span>';
+      '<span class="badge">' + emailFiscal + '</span>';
 
-    // Sem token: mostra erro mas não redireciona
     if (!tokenGlobal) {
-      document.getElementById("fNome").textContent     = "-";
-      document.getElementById("fEmail").textContent    = "-";
-      document.getElementById("fPalestra").textContent = "-";
-      document.getElementById("fToken").textContent    = "-";
       mostrarResultado({ sucesso: false, mensagem: "Token nao informado." });
       return;
     }
 
-    document.getElementById("fToken").textContent = tokenGlobal;
+    // Tenta buscar no cache primeiro — instantaneo
+    var dadosCache = buscarNoCache(tokenGlobal);
+    if (dadosCache) {
+      preencherParticipante(dadosCache, true);
+      return;
+    }
 
-    // Busca participante via fetch
+    // Nao tem no cache: busca online e tenta recarregar o cache
+    if (cacheValido()) {
+      // Cache existe mas token nao foi encontrado — busca direto
+      buscarOnline();
+    } else {
+      // Cache expirado: recarrega tudo e busca nele
+      fetch(APPS_URL + "?action=carregarCache")
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.ok) {
+            salvarCache(data.participantes);
+            var p = buscarNoCache(tokenGlobal);
+            if (p) { preencherParticipante(p, true); return; }
+          }
+          // Nao achou mesmo apos recarregar: busca individual
+          buscarOnline();
+        })
+        .catch(function() { buscarOnline(); });
+    }
+
+  };
+
+  function buscarOnline() {
     fetch(APPS_URL + "?action=buscarParticipante&t=" + encodeURIComponent(tokenGlobal))
       .then(function(r) { return r.json(); })
       .then(function(data) {
         if (!data.ok) {
-          document.getElementById("fNome").textContent     = "-";
-          document.getElementById("fEmail").textContent    = "-";
-          document.getElementById("fPalestra").textContent = "-";
           mostrarResultado({ sucesso: false, mensagem: data.mensagem });
           return;
         }
-        var d = data.dados;
-        document.getElementById("fNome").textContent     = d.nome;
-        document.getElementById("fEmail").textContent    = d.email;
-        document.getElementById("fPalestra").textContent = d.palestraNome || "-";
-        document.getElementById("btnValidar").disabled   = false;
+        preencherParticipante(data.dados, false);
       })
       .catch(function() {
         mostrarResultado({ sucesso: false, mensagem: "Erro ao buscar participante." });
       });
+  }
 
-  };
+  function preencherParticipante(d, doCache) {
+    document.getElementById("fNome").textContent     = d.nome;
+    document.getElementById("fEmail").textContent    = d.email;
+    document.getElementById("fPalestra").textContent = d.palestraNome || "-";
+    if (doCache) document.getElementById("tagCache").style.display = "inline";
+    document.getElementById("btnValidar").disabled = false;
+  }
 
+  // ── VALIDAR ────────────────────────────────────────────────
   function validar() {
     var btn = document.getElementById("btnValidar");
     var res = document.getElementById("resultado");
@@ -170,12 +218,13 @@
       .then(function(r) { return r.json(); })
       .then(function(data) {
         mostrarResultado(data);
-        btn.textContent = "Validar Presenca";
-        if (data.sucesso || data.jaRegistrado) {
-          btn.disabled = true;
-          btn.textContent = data.sucesso ? "Presenca Registrada" : "Ja Registrado";
+        if (data.sucesso) {
+          btn.textContent = "Presenca Registrada";
+        } else if (data.jaRegistrado) {
+          btn.textContent = "Ja Registrado";
         } else {
           btn.disabled = false;
+          btn.textContent = "Validar Presenca";
         }
       })
       .catch(function() {
@@ -188,7 +237,7 @@
     var res = document.getElementById("resultado");
     if (data.sucesso) {
       res.className = "resultado sucesso";
-      res.innerHTML = "Presenca registrada com sucesso!<div class='nome-destaque'>" + data.nome + "</div>";
+      res.innerHTML = "Presenca registrada!<div class='nome-destaque'>" + (data.nome || "") + "</div>";
     } else {
       res.className = "resultado erro";
       res.innerHTML = data.mensagem || "Erro desconhecido.";
