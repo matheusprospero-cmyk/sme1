@@ -22,25 +22,19 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg); color: var(--text);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: 24px 16px;
     }
     body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
+      content: ''; position: fixed; inset: 0;
       background:
         radial-gradient(ellipse 60% 40% at 20% 20%, rgba(79,142,247,.07) 0%, transparent 70%),
         radial-gradient(ellipse 50% 50% at 80% 80%, rgba(124,58,237,.07) 0%, transparent 70%);
       pointer-events: none;
     }
-    .container { width: 100%; max-width: 400px; position: relative; }
+    .container { width: 100%; max-width: 400px; }
     .logo { text-align: center; margin-bottom: 28px; }
     .logo-icon {
       width: 52px; height: 52px;
@@ -54,28 +48,19 @@
     .logo h1 { font-size: 20px; font-weight: 600; }
     .logo p  { font-size: 13px; color: var(--muted); margin-top: 4px; }
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      margin-bottom: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px; margin-bottom: 12px;
       animation: fadeUp .25s ease both;
     }
-    @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
     .fiscal-bar {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 12px 16px;
-      margin-bottom: 12px;
-      animation: fadeUp .25s ease both;
+      display: none; align-items: center; justify-content: space-between;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 12px 16px; margin-bottom: 12px;
     }
     .fiscal-bar .info { display: flex; align-items: center; gap: 10px; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); flex-shrink: 0; }
-    .email-badge { font-family: 'DM Mono', monospace; font-size: 12px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); }
+    .email-mono { font-family: 'DM Mono', monospace; font-size: 12px; }
     .fiscal-bar button { font-size: 12px; color: var(--muted); background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: background .2s; }
     .fiscal-bar button:hover { background: var(--border); color: var(--text); }
     label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 8px; }
@@ -94,13 +79,14 @@
     .btn:active { transform: scale(.98); }
     .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
     .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; box-shadow: 0 4px 16px rgba(79,142,247,.3); }
-    .btn-ghost   { background: var(--border); color: var(--text); margin-top: 10px; }
     .msg { margin-top: 12px; padding: 11px 14px; border-radius: 10px; font-size: 13px; display: none; line-height: 1.5; }
     .msg.erro    { background: rgba(239,68,68,.12);  color: #fca5a5; border: 1px solid rgba(239,68,68,.2);  display: block; }
     .msg.info    { background: rgba(79,142,247,.12); color: #93c5fd; border: 1px solid rgba(79,142,247,.2); display: block; }
     .msg.sucesso { background: rgba(34,197,94,.12);  color: #86efac; border: 1px solid rgba(34,197,94,.2);  display: block; }
     #leitor { border-radius: 12px; overflow: hidden; border: 2px solid var(--accent); box-shadow: 0 0 20px rgba(79,142,247,.2); }
-    .dica { font-size: 12px; color: var(--muted); text-align: center; margin-top: 12px; line-height: 1.6; }
+    .dica { font-size: 12px; color: var(--muted); text-align: center; margin-top: 10px; line-height: 1.6; }
+    .cache-status { font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px; }
+    .cache-status span { color: var(--success); }
     #etapa-token { display: none; }
   </style>
 </head>
@@ -115,11 +101,10 @@
     <p>Acesso do fiscal</p>
   </div>
 
-  <!-- barra fiscal logado -->
   <div class="fiscal-bar" id="fiscal-bar">
     <div class="info">
       <div class="dot"></div>
-      <span class="email-badge" id="bar-email"></span>
+      <span class="email-mono" id="bar-email"></span>
     </div>
     <button onclick="logout()">Sair</button>
   </div>
@@ -137,27 +122,60 @@
     <div class="card">
       <div id="leitor"></div>
       <p class="dica">Aponte para o QR Code do participante</p>
+      <div class="cache-status" id="cacheStatus"></div>
       <div class="msg" id="msgLeitor"></div>
     </div>
     <div class="card">
       <label for="inputToken">Ou digite o token manualmente</label>
       <input type="text" id="inputToken" placeholder="Ex: EVT000001" autocomplete="off" autocapitalize="characters"/>
-      <button class="btn btn-primary" id="btnValidar" onclick="irParaValidar()">Validar presenca</button>
+      <button class="btn btn-primary" onclick="irParaValidar()">Validar presenca</button>
     </div>
   </div>
 
 </div>
-
 <script>
-  var APPS_URL    = "https://script.google.com/macros/s/AKfycbwgn-kasXrfTWULBUe_7chco-O9TUFjFLVtXqkfyBs8WuGHKDLX8hhiENd2r-bly6-E0A/exec";
-  var STORAGE_KEY = "fiscal_email";
-  var html5QrCode = null;
+  var APPS_URL     = "https://script.google.com/macros/s/AKfycbwgn-kasXrfTWULBUe_7chco-O9TUFjFLVtXqkfyBs8WuGHKDLX8hhiENd2r-bly6-E0A/exec";
+  var KEY_EMAIL    = "fiscal_email";
+  var KEY_CACHE    = "participantes_cache";
+  var KEY_CACHE_DT = "participantes_cache_data";
+  var html5QrCode  = null;
 
-  window.onload = function () {
-    var emailSalvo = localStorage.getItem(STORAGE_KEY);
-    if (emailSalvo) iniciarSessao(emailSalvo);
+  // ── CACHE ──────────────────────────────────────────────────
+  function dataHoje() {
+    return new Date().toISOString().slice(0, 10); // "2025-05-01"
+  }
+
+  function cacheValido() {
+    return localStorage.getItem(KEY_CACHE_DT) === dataHoje() &&
+           localStorage.getItem(KEY_CACHE);
+  }
+
+  function salvarCache(lista) {
+    localStorage.setItem(KEY_CACHE, JSON.stringify(lista));
+    localStorage.setItem(KEY_CACHE_DT, dataHoje());
+  }
+
+  function buscarNoCache(token) {
+    try {
+      var lista = JSON.parse(localStorage.getItem(KEY_CACHE) || "[]");
+      for (var i = 0; i < lista.length; i++) {
+        if (lista[i].token === token) return lista[i];
+      }
+    } catch(e) {}
+    return null;
+  }
+
+  function totalCache() {
+    try { return JSON.parse(localStorage.getItem(KEY_CACHE) || "[]").length; } catch(e) { return 0; }
+  }
+
+  // ── INIT ───────────────────────────────────────────────────
+  window.onload = function() {
+    var emailSalvo = localStorage.getItem(KEY_EMAIL);
+    if (emailSalvo) iniciarSessao(emailSalvo, false);
   };
 
+  // ── LOGIN ──────────────────────────────────────────────────
   function entrar() {
     var email = document.getElementById("inputEmail").value.trim().toLowerCase();
     var msg   = document.getElementById("msgLogin");
@@ -172,8 +190,8 @@
       .then(function(r) { return r.json(); })
       .then(function(data) {
         if (data.autorizado) {
-          localStorage.setItem(STORAGE_KEY, email);
-          iniciarSessao(email);
+          localStorage.setItem(KEY_EMAIL, email);
+          iniciarSessao(email, true);
         } else {
           msg.className = "msg erro"; msg.innerHTML = "E-mail nao autorizado.";
           btn.disabled = false; btn.textContent = "Entrar";
@@ -185,14 +203,48 @@
       });
   }
 
-  function iniciarSessao(email) {
+  // ── INICIAR SESSAO ─────────────────────────────────────────
+  function iniciarSessao(email, recemLogado) {
     document.getElementById("bar-email").textContent     = email;
     document.getElementById("fiscal-bar").style.display  = "flex";
     document.getElementById("etapa-login").style.display = "none";
     document.getElementById("etapa-token").style.display = "block";
+
+    // Carrega cache e abre camera em paralelo
+    garantirCache(function(total) {
+      var st = document.getElementById("cacheStatus");
+      st.innerHTML = "<span>" + total + "</span> participantes em cache";
+    });
+
     abrirCamera(email);
   }
 
+  // ── CACHE: carrega se necessario ───────────────────────────
+  function garantirCache(callback) {
+    if (cacheValido()) {
+      if (callback) callback(totalCache());
+      return;
+    }
+
+    var st = document.getElementById("cacheStatus");
+    st.innerHTML = "Carregando participantes...";
+
+    fetch(APPS_URL + "?action=carregarCache")
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.ok) {
+          salvarCache(data.participantes);
+          if (callback) callback(data.total);
+        } else {
+          st.innerHTML = "Erro ao carregar cache: " + (data.mensagem || "");
+        }
+      })
+      .catch(function() {
+        st.innerHTML = "Sem cache — buscas serao online.";
+      });
+  }
+
+  // ── CAMERA ─────────────────────────────────────────────────
   function abrirCamera(email) {
     if (html5QrCode) { html5QrCode.stop().catch(function(){}); html5QrCode = null; }
     html5QrCode = new Html5Qrcode("leitor");
@@ -204,8 +256,8 @@
           var token = extrairToken(texto);
           if (!token) {
             var m = document.getElementById("msgLeitor");
-            m.className = "msg erro"; m.innerHTML = "QR invalido. Tente novamente.";
-            setTimeout(function() { m.className = "msg"; abrirCamera(email); }, 2000);
+            m.className = "msg erro"; m.innerHTML = "QR invalido.";
+            setTimeout(function() { m.className = "msg"; abrirCamera(email); }, 1500);
             return;
           }
           irParaValidarComToken(token, email);
@@ -213,7 +265,6 @@
       },
       function() {}
     ).catch(function() {
-      // camera nao disponivel — so exibe campo manual
       document.getElementById("leitor").style.display = "none";
     });
   }
@@ -227,9 +278,10 @@
     return texto.trim() || null;
   }
 
+  // ── REDIRECIONAR ───────────────────────────────────────────
   function irParaValidar() {
     var token = document.getElementById("inputToken").value.trim().toUpperCase();
-    var email = localStorage.getItem(STORAGE_KEY);
+    var email = localStorage.getItem(KEY_EMAIL);
     if (!token) return;
     irParaValidarComToken(token, email);
   }
@@ -237,19 +289,21 @@
   function irParaValidarComToken(token, email) {
     window.location.href =
       "validar.html?t=" + encodeURIComponent(token) +
-      "&f=" + encodeURIComponent(email);
+      "&f="             + encodeURIComponent(email);
   }
 
+  // ── LOGOUT ─────────────────────────────────────────────────
   function logout() {
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(KEY_EMAIL);
+    // Mantém o cache — só limpa o login
     if (html5QrCode) { html5QrCode.stop().catch(function(){}); html5QrCode = null; }
     document.getElementById("fiscal-bar").style.display  = "none";
     document.getElementById("etapa-token").style.display = "none";
     document.getElementById("etapa-login").style.display = "block";
-    document.getElementById("inputEmail").value = "";
-    document.getElementById("btnEntrar").disabled = false;
-    document.getElementById("btnEntrar").textContent = "Entrar";
-    document.getElementById("msgLogin").className = "msg";
+    document.getElementById("inputEmail").value           = "";
+    document.getElementById("btnEntrar").disabled         = false;
+    document.getElementById("btnEntrar").textContent      = "Entrar";
+    document.getElementById("msgLogin").className         = "msg";
   }
 
   document.getElementById("inputEmail")
